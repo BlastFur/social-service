@@ -9,6 +9,7 @@ export enum SupportedEVMHelperChains {
   avax = 'avax',
   polygon = 'polygon',
   zkSyncMainnet = 'zkSyncMainnet',
+  blastSepoliaTestnet = 'blastSepoliaTestnet',
 }
 
 // eslint-disable-next-line prettier/prettier
@@ -23,6 +24,7 @@ export const DefaultEVMHelperChainRPCs: Record<SupportedEVMHelperChains, string>
   avax: 'https://api.avax.network/ext/bc/C/rpc',
   polygon: 'https://polygon.blockpi.network/v1/rpc/public',
   zkSyncMainnet: 'https://mainnet.era.zksync.io',
+  blastSepoliaTestnet: 'https://sepolia.blast.io',
 }
 
 // eslint-disable-next-line prettier/prettier
@@ -37,6 +39,7 @@ export const DefaultEVMHelperExplorerURLs: Record<SupportedEVMHelperChains, stri
   avax: 'https://snowtrace.io',
   polygon: 'https://polygonscan.com',
   zkSyncMainnet: 'https://explorer.zksync.io',
+  blastSepoliaTestnet: 'https://testnet.blastscan.io',
 }
 
 export const MAX_ETH_NUM =
@@ -56,4 +59,6 @@ export const DefaultEVMHelperScanAPIUrls: Record<SupportedEVMHelperChains, strin
   avax: '',
   polygon: '',
   zkSyncMainnet: '',
+  blastSepoliaTestnet:
+    'https://api.routescan.io/v2/network/testnet/evm/168587773/etherscan',
 }
