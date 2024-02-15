@@ -1,0 +1,15 @@
+node_modules
+lib
+output
+*.swp
+*.log
+.env
+upload
+memory
+profile
+public
+src/scripts/const.ts
+ref
+.vscode/*
+.prettierrc.js
+logs
