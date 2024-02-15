@@ -1,4 +1,4 @@
-# KUJI SCAN
+# BlastFur Social Service
 
 ## Develop
 
@@ -11,7 +11,7 @@ yarn
 # if DEBUG=1, will show all debug logs
 DEBUG=1
 DB_HOST=127.0.0.1
-DB_NAME=kuji-scan
+DB_NAME=blastfur-social-service
 DB_USER=root
 DB_PASS=
 PORT=8089
