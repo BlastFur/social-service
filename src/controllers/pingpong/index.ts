@@ -4,6 +4,7 @@ import NotFoundException from '../../exceptions/NotFoundException'
 import jsonResponseMiddleware, {
   JsonResponse,
 } from '../../middleware/jsonResponse.middleware'
+import apiKeyMiddleware from '../../middleware/apikey.middleware'
 
 export default class PingpongController implements Controller {
   public path = '/api/v1/pingpong'
@@ -16,6 +17,7 @@ export default class PingpongController implements Controller {
   private initializeRoutes(): void {
     this.router.get(
       '/:type',
+      apiKeyMiddleware(),
       jsonResponseMiddleware,
       this.ping as RequestHandler
     )

@@ -19,6 +19,7 @@
     "pm2_start_monitor": "pm2 start --name kuji_monitor npm -- run start_monitor"
   },
   "dependencies": {
+    "@cmdcode/tapscript": "^1.4.6",
     "axios": "^0.24.0",
     "cookie-parser": "^1.4.5",
     "cron": "^2.3.1",

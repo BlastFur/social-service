@@ -1034,6 +1034,11 @@
     "@babel/helper-validator-identifier" "^7.22.20"
     to-fast-properties "^2.0.0"
 
+"@cmdcode/tapscript@^1.4.6":
+  version "1.4.6"
+  resolved "https://registry.yarnpkg.com/@cmdcode/tapscript/-/tapscript-1.4.6.tgz#f5cc6f71d7151a66d8a777c02e5ce2703c319066"
+  integrity sha512-lrcLBSwX/T4OZjBdIupGeqGtOKC4MMSZUC7FwV6zOlqcAPHVVvtXDKKm4VTKDtszAvtObfLBpizSY69F4NJqQQ==
+
 "@discordjs/builders@^1.7.0":
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/@discordjs/builders/-/builders-1.7.0.tgz#e2478c7e55b0f4c40837edb8f102bce977323a37"
