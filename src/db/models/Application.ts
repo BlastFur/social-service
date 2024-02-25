@@ -30,6 +30,18 @@ export default class Application extends Model {
   }
 
   @AllowNull(false)
+  @Column(DataType.CHAR(50))
+  get twitterClientId(): string {
+    return this.getDataValue('twitterClientId')
+  }
+
+  @AllowNull(false)
+  @Column(DataType.CHAR(100))
+  get twitterClientSecret(): string {
+    return this.getDataValue('twitterClientSecret')
+  }
+
+  @AllowNull(false)
   @Default(false)
   @Column(DataType.BOOLEAN)
   get disabled(): boolean {
