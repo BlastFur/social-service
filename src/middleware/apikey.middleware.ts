@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
-import Application from '../db/models/Application'
+import { verfiyApikey } from '../services/application.service'
+import { Application } from '../db/models'
 
 export interface ApplicationRequest extends Request {
   authApplication: Application
@@ -32,10 +33,8 @@ const apiKeyMiddleware = (
       response.status(401).end('API-KEY needed')
       return
     }
-    // 解析
-    const { app } = request
     try {
-      Application.verfiyApikey(token as string)
+      verfiyApikey(token as string)
         .then((app) => {
           if (!app) {
             response.status(401).end('Application not exsit')

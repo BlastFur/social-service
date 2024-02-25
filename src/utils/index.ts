@@ -3,11 +3,11 @@ import Decimal from 'decimal.js-light'
 import moment, { MomentInput } from 'moment'
 import uuid from './uuid'
 
-import { getChatMember } from './telegram'
+// import { getChatMember } from './telegram'
 
-export const telegram = {
-  getChatMember,
-}
+// export const telegram = {
+//   getChatMember,
+// }
 
 export { uuid }
 

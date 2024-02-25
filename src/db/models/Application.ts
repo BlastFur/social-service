@@ -35,22 +35,4 @@ export default class Application extends Model {
   get disabled(): boolean {
     return this.getDataValue('disabled')
   }
-
-  static async createNewApplication(
-    name: string,
-    apikey: string = nanoid()
-  ): Promise<Application> {
-    return await Application.create({
-      name: name,
-      apikey,
-    })
-  }
-
-  static async verfiyApikey(apikey: string): Promise<Application | null> {
-    return await Application.findOne({
-      where: {
-        apikey,
-      },
-    })
-  }
 }

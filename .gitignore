@@ -9,6 +9,7 @@ memory
 profile
 public
 src/scripts/const.ts
+src/scripts/temp.ts
 ref
 .vscode/*
 .prettierrc.js

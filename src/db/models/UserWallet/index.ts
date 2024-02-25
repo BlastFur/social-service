@@ -12,8 +12,6 @@ import {
 } from 'sequelize-typescript'
 import Application from '../Application'
 import { UserWalletData, UserWalletType } from './types'
-import { checkWalletAddress } from './utils'
-import { Transaction } from 'sequelize'
 
 @Table({
   modelName: 'userWallet',
@@ -100,77 +98,5 @@ export default class UserWallet extends Model {
       memo: this.memo,
       extra: this.extra,
     }
-  }
-
-  static async upsertWallet(
-    payload: UserWalletData,
-    transaction?: Transaction
-  ): Promise<UserWallet> {
-    if (!(await checkWalletAddress(payload.type, payload.address))) {
-      throw new Error(`Invalid wallet address of type ${payload.type}`)
-    }
-    const exist = await UserWallet.findOne({
-      where: {
-        applicationId: payload.applicationId,
-        userKey: payload.userKey,
-        type: payload.type,
-      },
-      transaction,
-    })
-    if (exist) {
-      await exist.update(
-        {
-          address: payload.address,
-          isSignup: payload.isSignup,
-          memo: payload.memo,
-          extra: payload.extra,
-        },
-        { transaction }
-      )
-      return exist
-    }
-    return await UserWallet.create(
-      {
-        applicationId: payload.applicationId,
-        userKey: payload.userKey,
-        type: payload.type,
-        address: payload.address,
-        isSignup: payload.isSignup,
-        memo: payload.memo,
-        extra: payload.extra,
-      },
-      { transaction }
-    )
-  }
-
-  static async getUserWallets(
-    applicationId: number,
-    userKey: string
-  ): Promise<UserWallet[]> {
-    return await UserWallet.findAll({
-      where: {
-        applicationId,
-        userKey,
-      },
-    })
-  }
-
-  static async findByAddress(
-    applicationId: number,
-    address: string,
-    type?: UserWalletType
-  ): Promise<UserWallet | null> {
-    const where: any = {
-      applicationId,
-      address,
-    }
-    if (type) {
-      where.type = type
-    }
-    const wallet = await UserWallet.findOne({
-      where,
-    })
-    if (!wallet) return null
-    return wallet
   }
 }

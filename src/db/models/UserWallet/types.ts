@@ -1,4 +1,4 @@
-export type UserWalletType = 'evm' | 'btc' | 'sei' | 'email'
+export type UserWalletType = 'evm'
 
 export interface UserWalletData {
   applicationId: number
