@@ -5,6 +5,22 @@ import TwitterClient from '../db/models/UserTwitter/twitterClient'
 import UserTwitter from '../db/models/UserTwitter'
 import { addTime, timeNumber } from '../utils/time'
 
+export async function getUserTwitterInfo(
+  applicationId: number,
+  userKey: string
+): Promise<TwitterUserInfo | null> {
+  const userTwitter = await UserTwitter.findOne({
+    where: {
+      applicationId,
+      userKey,
+    },
+  })
+  if (!userTwitter) {
+    return null
+  }
+  return userTwitter.twitterUserInfo
+}
+
 const scopes: auth.OAuth2Scopes[] = [
   'tweet.read',
   'users.read',
@@ -174,6 +190,7 @@ export async function bindTwitterCallback(
 const twitterServices = {
   getUserAuthURL,
   bindTwitterCallback,
+  getUserTwitterInfo,
 }
 
 export default twitterServices

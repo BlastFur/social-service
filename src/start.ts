@@ -4,6 +4,7 @@ import {
   PingpongController,
   WalletController,
   TwitterController,
+  UserController,
 } from './controllers'
 import { PORT } from './constants'
 
@@ -15,6 +16,7 @@ const app = new APP({
     new PingpongController(),
     new WalletController(),
     new TwitterController(),
+    new UserController(),
   ],
 })
 
