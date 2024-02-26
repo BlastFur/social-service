@@ -1,9 +1,9 @@
 {
-  "name": "kuji-scan",
+  "name": "blastfur-social-service",
   "version": "1.0.1",
   "main": "index.js",
-  "repository": "https://github.com/sekaiamber/account_timeline-service.git",
-  "author": "jumbo kuji <alex_jumbo2024@proton.me>",
+  "repository": "https://github.com/BlastFur/social-service.git",
+  "author": "yuni <blastfur_yuni@proton.me>",
   "license": "MIT",
   "scripts": {
     "babel": "babel src --out-dir lib --copy-files --extensions '.ts'",
@@ -15,8 +15,8 @@
     "upload_server": "http-server ./upload",
     "script": "npm run babel && node -r dotenv/config ",
     "script_no_build": "node -r dotenv/config ",
-    "pm2_start": "pm2 start --name kuji_server npm -- run start",
-    "pm2_start_monitor": "pm2 start --name kuji_monitor npm -- run start_monitor"
+    "pm2_start": "pm2 start --name blastfur_social_server npm -- run start",
+    "pm2_start_monitor": "pm2 start --name blastfur_social_monitor npm -- run start_monitor"
   },
   "dependencies": {
     "@cmdcode/tapscript": "^1.4.6",
