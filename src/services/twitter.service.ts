@@ -105,11 +105,12 @@ class TwitterClientCache {
   clientMap: Record<string, TwitterClientCacheItem> = {}
 
   pushClient(key: string, client: TwitterClient): void {
-    if (!this.clientMap[key]) {
-      this.clientMap[key] = {
-        expiresAt: addTime(new Date(), timeNumber.minute * 10),
-        client,
-      }
+    if (this.clientMap[key]) {
+      this.deleteClient(key)
+    }
+    this.clientMap[key] = {
+      expiresAt: addTime(new Date(), timeNumber.minute * 10),
+      client,
     }
   }
 
@@ -119,8 +120,7 @@ class TwitterClientCache {
       if (item.expiresAt > new Date()) {
         return item.client
       }
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-      delete this.clientMap[key]
+      this.deleteClient(key)
     }
     return null
   }
