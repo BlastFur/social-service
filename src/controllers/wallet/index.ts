@@ -82,7 +82,7 @@ export default class WalletController implements Controller {
       any,
       Omit<UserWalletData, 'applicationId' | 'userKey'>
     >,
-    response: JsonResponse<WalletSignVerifyResult>,
+    response: JsonResponse<UserWalletData>,
     next: NextFunction
   ): void {
     const { userKey } = request.params
@@ -94,7 +94,7 @@ export default class WalletController implements Controller {
         ...request.body,
       })
       .then((data) => {
-        response.jsonSuccess(data)
+        response.jsonSuccess(data.getData())
       })
       .catch((error) => {
         response.status(500).jsonError(error.message, 1000)
