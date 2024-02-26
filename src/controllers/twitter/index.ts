@@ -16,6 +16,11 @@ interface BindCallbackPayload {
   state: string
 }
 
+interface CheckTweetParams {
+  userKey: string
+  tweetId: string
+}
+
 export default class WalletController implements Controller {
   public path = '/api/v1/twitter'
   public router = Router()
@@ -36,6 +41,18 @@ export default class WalletController implements Controller {
       apiKeyMiddleware(),
       jsonResponseMiddleware,
       this.userAuthUrl as RequestHandler
+    )
+    this.router.get(
+      '/check_tweet_like/:userKey/:tweetId',
+      apiKeyMiddleware(),
+      jsonResponseMiddleware,
+      this.checkTweetLike as unknown as RequestHandler
+    )
+    this.router.get(
+      '/check_tweet_retweet/:userKey/:tweetId',
+      apiKeyMiddleware(),
+      jsonResponseMiddleware,
+      this.checkTweetRetweet as unknown as RequestHandler
     )
   }
 
@@ -75,6 +92,40 @@ export default class WalletController implements Controller {
       })
       .catch((error) => {
         response.status(500).jsonError(error.message, 2002)
+      })
+  }
+
+  private checkTweetLike(
+    request: Request<CheckTweetParams>,
+    response: JsonResponse<number>,
+    next: NextFunction
+  ): void {
+    const { tweetId, userKey } = request.params
+    const { authApplication } = request as unknown as ApplicationRequest
+    twitterServices
+      .checkUserInTweetLikedList(authApplication, userKey, tweetId)
+      .then((data) => {
+        response.jsonSuccess(data)
+      })
+      .catch((error) => {
+        response.status(500).jsonError(error.message, 2003)
+      })
+  }
+
+  private checkTweetRetweet(
+    request: Request<CheckTweetParams>,
+    response: JsonResponse<number>,
+    next: NextFunction
+  ): void {
+    const { tweetId, userKey } = request.params
+    const { authApplication } = request as unknown as ApplicationRequest
+    twitterServices
+      .checkUserInTweetRetweetedList(authApplication, userKey, tweetId)
+      .then((data) => {
+        response.jsonSuccess(data)
+      })
+      .catch((error) => {
+        response.status(500).jsonError(error.message, 2004)
       })
   }
 }

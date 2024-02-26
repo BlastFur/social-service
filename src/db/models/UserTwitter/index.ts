@@ -121,192 +121,24 @@ export default class UserTwitter extends Model {
     return Buffer.from(name, 'base64').toString('utf8')
   }
 
-  // static async upsertUserTwitter(
-  //   user: User,
-  //   twitterInfo: TwitterUserInfo,
-  //   token: TwitterToken,
-  //   scopes: auth.OAuth2Scopes[],
-  //   callbackURL: string
-  // ): Promise<UserTwitter> {
-  //   const [userTwitter, created] = await UserTwitter.findOrCreate({
-  //     where: {
-  //       userId: user.id,
-  //     },
-  //     defaults: {
-  //       userId: user.id,
-  //       twitterId: twitterInfo.id,
-  //       twitterName: UserTwitter.stringifyName(twitterInfo.name),
-  //       twitterUsername: twitterInfo.username,
-  //       token: token,
-  //       tokenExpiresAt: new Date(token.expires_at),
-  //       scopes: scopes,
-  //       callbackURL,
-  //     },
-  //   })
-  //   if (created) {
-  //     await user.pushEvent({
-  //       tag: 'bindTwitter',
-  //     })
-  //     return userTwitter
-  //   }
-  //   userTwitter.setDataValue('userId', user.id)
-  //   userTwitter.setDataValue('twitterId', twitterInfo.id)
-  //   userTwitter.setDataValue(
-  //     'twitterName',
-  //     UserTwitter.stringifyName(twitterInfo.name)
-  //   )
-  //   userTwitter.setDataValue('twitterUsername', twitterInfo.username)
-  //   userTwitter.setDataValue('token', token)
-  //   userTwitter.setDataValue('tokenExpiresAt', new Date(token.expires_at))
-  //   userTwitter.setDataValue('scopes', scopes)
-  //   userTwitter.setDataValue('callbackURL', callbackURL)
-  //   await userTwitter.save()
-  //   await user.pushEvent({
-  //     tag: 'bindTwitter',
-  //   })
-  //   return userTwitter
-  // }
-
   async refreshToken(token: TwitterToken): Promise<void> {
     this.setDataValue('token', token)
     this.setDataValue('tokenExpiresAt', new Date(token.expires_at))
     await this.save()
   }
 
-  // async getTwitterClient(): Promise<TwitterClient> {
-  //   const user = await User.findByPk(this.userId)
-  //   return new TwitterClient(user!, this.callbackURL, this.scopes, this.token!)
-  // }
-
-  // async checkUserInTweetLikedList(tweetId: string): Promise<number> {
-  //   const fakeXVerify = (await Constant.get('fakeXVerify')) ?? false
-  //   let result = false
-  //   if (fakeXVerify) {
-  //     result = true
-  //   } else {
-  //     const cache = await UserTwitterLikeCache.findOne({
-  //       where: {
-  //         twitterId: this.twitterId,
-  //         tweetId,
-  //       },
-  //     })
-  //     if (cache && cache.expiresAt > new Date()) {
-  //       if (cache.result) return cache.id
-  //       return -1
-  //     }
-  //     const client = await this.getTwitterClient()
-  //     result = await client.checkUserInTweetLikedList(tweetId, this.twitterId)
-  //   }
-  //   const row = await UserTwitterLikeCache.upsertCache(
-  //     this.twitterId,
-  //     tweetId,
-  //     result,
-  //     fakeXVerify
-  //   )
-  //   if (result) {
-  //     return row.id
-  //   }
-  //   return -1
-  // }
-
-  // async checkTweetInUserLikedList(tweetId: string): Promise<number> {
-  //   const fakeXVerify = (await Constant.get('fakeXVerify')) ?? false
-  //   let result = false
-  //   if (fakeXVerify) {
-  //     result = true
-  //   } else {
-  //     const cache = await UserTwitterLikeCache.findOne({
-  //       where: {
-  //         twitterId: this.twitterId,
-  //         tweetId,
-  //       },
-  //     })
-  //     if (cache && cache.expiresAt > new Date()) {
-  //       if (cache.result) return cache.id
-  //       return -1
-  //     }
-  //     const client = await this.getTwitterClient()
-  //     result = await client.checkTweetInUserLikedList(tweetId, this.twitterId)
-  //   }
-  //   const row = await UserTwitterLikeCache.upsertCache(
-  //     this.twitterId,
-  //     tweetId,
-  //     result,
-  //     fakeXVerify
-  //   )
-  //   if (result) {
-  //     return row.id
-  //   }
-  //   return -1
-  // }
-
-  // async checkUserInTweetRetweetedList(tweetId: string): Promise<number> {
-  //   const fakeXVerify = (await Constant.get('fakeXVerify')) ?? false
-  //   let result = false
-  //   if (fakeXVerify) {
-  //     result = true
-  //   } else {
-  //     const cache = await UserTwitterRetweetCache.findOne({
-  //       where: {
-  //         twitterId: this.twitterId,
-  //         tweetId,
-  //       },
-  //     })
-  //     if (cache && cache.expiresAt > new Date()) {
-  //       if (cache.result) return cache.id
-  //       return -1
-  //     }
-  //     const client = await this.getTwitterClient()
-  //     result = await client.checkUserInTweetRetweetedList(
-  //       tweetId,
-  //       this.twitterId
-  //     )
-  //   }
-  //   const row = await UserTwitterRetweetCache.upsertCache(
-  //     this.twitterId,
-  //     tweetId,
-  //     result,
-  //     fakeXVerify
-  //   )
-  //   if (result) {
-  //     return row.id
-  //   }
-  //   return -1
-  // }
-
-  // async checkTweetInUserRetweetedList(tweetId: string): Promise<number> {
-  //   const fakeXVerify = (await Constant.get('fakeXVerify')) ?? false
-  //   let result = false
-  //   if (fakeXVerify) {
-  //     result = true
-  //   } else {
-  //     const cache = await UserTwitterRetweetCache.findOne({
-  //       where: {
-  //         twitterId: this.twitterId,
-  //         tweetId,
-  //       },
-  //     })
-  //     if (cache && cache.expiresAt > new Date()) {
-  //       if (cache.result) return cache.id
-  //       return -1
-  //     }
-  //     const client = await this.getTwitterClient()
-  //     result = await client.checkTweetInUserRetweetedList(
-  //       tweetId,
-  //       this.twitterId
-  //     )
-  //   }
-  //   const row = await UserTwitterRetweetCache.upsertCache(
-  //     this.twitterId,
-  //     tweetId,
-  //     result,
-  //     fakeXVerify
-  //   )
-  //   if (result) {
-  //     return row.id
-  //   }
-  //   return -1
-  // }
+  async getTwitterClient(application?: Application): Promise<TwitterClient> {
+    let app = application
+    if (!app) {
+      if (!this.application) {
+        await this.reload({
+          include: [Application],
+        })
+      }
+      app = this.application!
+    }
+    return new TwitterClient(app, this.callbackURL, this.scopes, this)
+  }
 }
 
 @Table({

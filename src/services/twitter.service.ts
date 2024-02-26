@@ -1,8 +1,11 @@
 import Client, { auth } from 'twitter-api-sdk'
 import { TwitterToken, TwitterUserInfo } from '../db/models/UserTwitter/types'
-import { Application } from '../db/models'
+import { Application, Constant } from '../db/models'
 import TwitterClient from '../db/models/UserTwitter/twitterClient'
-import UserTwitter from '../db/models/UserTwitter'
+import UserTwitter, {
+  UserTwitterLikeCache,
+  UserTwitterRetweetCache,
+} from '../db/models/UserTwitter'
 import { addTime, timeNumber } from '../utils/time'
 
 export async function getUserTwitterInfo(
@@ -187,10 +190,110 @@ export async function bindTwitterCallback(
   )
 }
 
+export async function checkUserInTweetLikedList(
+  application: Application,
+  userKey: string,
+  tweetId: string
+): Promise<number> {
+  const userTwitter = await UserTwitter.findOne({
+    where: {
+      applicationId: application.id,
+      userKey,
+    },
+  })
+
+  if (!userTwitter) {
+    throw new Error('user not found')
+  }
+
+  const fakeXVerify = (await Constant.get('fakeXVerify')) ?? false
+  let result = false
+  if (fakeXVerify) {
+    result = true
+  } else {
+    const cache = await UserTwitterLikeCache.findOne({
+      where: {
+        twitterId: userTwitter.twitterId,
+        tweetId,
+      },
+    })
+    if (cache && cache.expiresAt > new Date()) {
+      if (cache.result) return cache.id
+      return -1
+    }
+    const client = await userTwitter.getTwitterClient(application)
+    result = await client.checkUserInTweetLikedList(
+      tweetId,
+      userTwitter.twitterId
+    )
+  }
+  const row = await UserTwitterLikeCache.upsertCache(
+    userTwitter.twitterId,
+    tweetId,
+    result,
+    fakeXVerify
+  )
+  if (result) {
+    return row.id
+  }
+  return -1
+}
+
+export async function checkUserInTweetRetweetedList(
+  application: Application,
+  userKey: string,
+  tweetId: string
+): Promise<number> {
+  const userTwitter = await UserTwitter.findOne({
+    where: {
+      applicationId: application.id,
+      userKey,
+    },
+  })
+
+  if (!userTwitter) {
+    throw new Error('user not found')
+  }
+
+  const fakeXVerify = (await Constant.get('fakeXVerify')) ?? false
+  let result = false
+  if (fakeXVerify) {
+    result = true
+  } else {
+    const cache = await UserTwitterRetweetCache.findOne({
+      where: {
+        twitterId: userTwitter.twitterId,
+        tweetId,
+      },
+    })
+    if (cache && cache.expiresAt > new Date()) {
+      if (cache.result) return cache.id
+      return -1
+    }
+    const client = await userTwitter.getTwitterClient()
+    result = await client.checkUserInTweetRetweetedList(
+      tweetId,
+      userTwitter.twitterId
+    )
+  }
+  const row = await UserTwitterRetweetCache.upsertCache(
+    userTwitter.twitterId,
+    tweetId,
+    result,
+    fakeXVerify
+  )
+  if (result) {
+    return row.id
+  }
+  return -1
+}
+
 const twitterServices = {
   getUserAuthURL,
   bindTwitterCallback,
   getUserTwitterInfo,
+  checkUserInTweetLikedList,
+  checkUserInTweetRetweetedList,
 }
 
 export default twitterServices
