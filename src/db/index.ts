@@ -12,6 +12,7 @@ const {
   UserTwitter,
   UserTwitterLikeCache,
   UserTwitterRetweetCache,
+  UserInvitation,
 } = Models
 
 const sequelize = new Sequelize({
@@ -38,6 +39,7 @@ const sequelize = new Sequelize({
     UserTwitter,
     UserTwitterLikeCache,
     UserTwitterRetweetCache,
+    UserInvitation,
   ],
 })
 

@@ -6,6 +6,7 @@ import UserTwitter, {
   UserTwitterLikeCache,
   UserTwitterRetweetCache,
 } from './UserTwitter'
+import UserInvitation from './UserInvitation'
 
 export {
   Constant,
@@ -15,4 +16,5 @@ export {
   UserTwitter,
   UserTwitterLikeCache,
   UserTwitterRetweetCache,
+  UserInvitation,
 }

@@ -16,10 +16,12 @@ import walletService, {
 import { UserWalletData } from '../../db/models/UserWallet/types'
 import { TwitterUserInfo } from '../../db/models/UserTwitter/types'
 import twitterServices from '../../services/twitter.service'
+import invitationServices from '../../services/invitation.service'
 
 interface UserAllData {
   wallets: UserWalletData[]
   twitter: TwitterUserInfo | null
+  code: string | null
 }
 
 export default class WalletController implements Controller {
@@ -61,11 +63,13 @@ export default class WalletController implements Controller {
     Promise.all([
       walletService.getUserWallets(authApplication.id, userKey),
       twitterServices.getUserTwitterInfo(authApplication.id, userKey),
+      invitationServices.getUserInvitationCode(authApplication, userKey),
     ])
-      .then(([wallets, twitter]) => {
+      .then(([wallets, twitter, code]) => {
         response.jsonSuccess({
           wallets: wallets.map((wallet) => wallet.getData()),
           twitter,
+          code,
         })
       })
       .catch((error) => {

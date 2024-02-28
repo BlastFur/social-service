@@ -5,6 +5,7 @@ import {
   WalletController,
   TwitterController,
   UserController,
+  InvitationController,
 } from './controllers'
 import { PORT } from './constants'
 
@@ -17,6 +18,7 @@ const app = new APP({
     new WalletController(),
     new TwitterController(),
     new UserController(),
+    new InvitationController(),
   ],
 })
 

@@ -8,6 +8,11 @@ import {
 } from 'sequelize-typescript'
 import nanoid from '../../utils/uuid'
 
+export interface ApplicationUuidFormat {
+  alphabet: string
+  size: number
+}
+
 @Table({
   modelName: 'application',
   indexes: [
@@ -39,6 +44,12 @@ export default class Application extends Model {
   @Column(DataType.CHAR(100))
   get twitterClientSecret(): string {
     return this.getDataValue('twitterClientSecret')
+  }
+
+  @AllowNull(true)
+  @Column(DataType.JSON)
+  get uuidFormat(): ApplicationUuidFormat {
+    return this.getDataValue('uuidFormat')
   }
 
   @AllowNull(false)
