@@ -288,12 +288,25 @@ export async function checkUserInTweetRetweetedList(
   return -1
 }
 
+export async function destoryTwitter(
+  application: Application,
+  userKey: string
+): Promise<void> {
+  await UserTwitter.destroy({
+    where: {
+      applicationId: application.id,
+      userKey,
+    },
+  })
+}
+
 const twitterServices = {
   getUserAuthURL,
   bindTwitterCallback,
   getUserTwitterInfo,
   checkUserInTweetLikedList,
   checkUserInTweetRetweetedList,
+  destoryTwitter,
 }
 
 export default twitterServices

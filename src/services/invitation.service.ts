@@ -87,9 +87,22 @@ export async function createUserInvitation(
   return code
 }
 
+export async function destoryInvitation(
+  application: Application,
+  userKey: string
+): Promise<void> {
+  await UserInvitation.destroy({
+    where: {
+      applicationId: application.id,
+      userKey,
+    },
+  })
+}
+
 const invitationServices = {
   getUserInvitationCode,
   createUserInvitation,
+  destoryInvitation,
 }
 
 export default invitationServices

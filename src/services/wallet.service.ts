@@ -1,5 +1,5 @@
 import { Transaction } from 'sequelize'
-import { UserWallet } from '../db/models'
+import { Application, UserWallet } from '../db/models'
 import { UserWalletData, UserWalletType } from '../db/models/UserWallet/types'
 import { checkWalletAddress } from '../db/models/UserWallet/utils'
 import { SiweMessage } from 'siwe'
@@ -13,6 +13,16 @@ export async function upsertWallet(
 ): Promise<UserWallet> {
   if (!(await checkWalletAddress(payload.type, payload.address))) {
     throw new Error(`Invalid wallet address of type ${payload.type}`)
+  }
+  const addressExist = await UserWallet.findOne({
+    where: {
+      applicationId: payload.applicationId,
+      address: payload.address,
+      type: payload.type,
+    },
+  })
+  if (addressExist) {
+    throw new Error(`Wallet address ${payload.address} already exists`)
   }
   const exist = await UserWallet.findOne({
     where: {
@@ -202,12 +212,25 @@ export async function verfiyWalletSign(
   throw new Error('Unsupported wallet type')
 }
 
+export async function destoryWallet(
+  application: Application,
+  userKey: string
+): Promise<void> {
+  await UserWallet.destroy({
+    where: {
+      applicationId: application.id,
+      userKey,
+    },
+  })
+}
+
 const walletService = {
   upsertWallet,
   getUserWallets,
   findByAddress,
   requestWalletSign,
   verfiyWalletSign,
+  destoryWallet,
 }
 
 export default walletService

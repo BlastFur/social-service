@@ -39,6 +39,12 @@ export default class WalletController implements Controller {
       jsonResponseMiddleware,
       this.allData as RequestHandler
     )
+    this.router.post(
+      '/:userKey/destroy',
+      apiKeyMiddleware(),
+      jsonResponseMiddleware,
+      this.destroyAllData as RequestHandler
+    )
     this.router.get(
       '/:userKey/wallets',
       apiKeyMiddleware(),
@@ -71,6 +77,26 @@ export default class WalletController implements Controller {
           twitter,
           code,
         })
+      })
+      .catch((error) => {
+        response.status(500).jsonError(error.message, 3000)
+      })
+  }
+
+  private destroyAllData(
+    request: Request<{ userKey: string }>,
+    response: JsonResponse<boolean>,
+    next: NextFunction
+  ): void {
+    const { userKey } = request.params
+    const { authApplication } = request as unknown as ApplicationRequest
+    Promise.all([
+      walletService.destoryWallet(authApplication, userKey),
+      twitterServices.destoryTwitter(authApplication, userKey),
+      invitationServices.destoryInvitation(authApplication, userKey),
+    ])
+      .then(() => {
+        response.jsonSuccess(true)
       })
       .catch((error) => {
         response.status(500).jsonError(error.message, 3000)
