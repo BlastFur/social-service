@@ -50,6 +50,42 @@ export async function getUserInvitationCode(
   return invitation.code
 }
 
+export async function getUserInvites(
+  application: Application,
+  userKey: string,
+  createWhenNotFound = true
+): Promise<number> {
+  const invites = await UserInvitation.count({
+    where: {
+      applicationId: application.id,
+      fatherUserKey: userKey,
+    },
+  })
+  return invites
+}
+
+export interface UserInvitationData {
+  code: string
+  invites: number
+}
+
+export async function getUserInvitationData(
+  application: Application,
+  userKey: string,
+  createWhenNotFound = true
+): Promise<UserInvitationData> {
+  const code = await getUserInvitationCode(
+    application,
+    userKey,
+    createWhenNotFound
+  )
+  const invites = await getUserInvites(application, userKey, createWhenNotFound)
+  return {
+    code,
+    invites,
+  }
+}
+
 export async function createUserInvitation(
   application: Application,
   userKey: string,
@@ -103,6 +139,8 @@ const invitationServices = {
   getUserInvitationCode,
   createUserInvitation,
   destoryInvitation,
+  getUserInvitationData,
+  getUserInvites,
 }
 
 export default invitationServices
