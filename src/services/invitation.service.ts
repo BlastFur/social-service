@@ -135,12 +135,23 @@ export async function destoryInvitation(
   })
 }
 
+export async function destoryAllInvitation(
+  application: Application
+): Promise<void> {
+  await UserInvitation.destroy({
+    where: {
+      applicationId: application.id,
+    },
+  })
+}
+
 const invitationServices = {
   getUserInvitationCode,
   createUserInvitation,
   destoryInvitation,
   getUserInvitationData,
   getUserInvites,
+  destoryAllInvitation,
 }
 
 export default invitationServices

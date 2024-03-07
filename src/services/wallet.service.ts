@@ -224,6 +224,16 @@ export async function destoryWallet(
   })
 }
 
+export async function destoryAllWallet(
+  application: Application
+): Promise<void> {
+  await UserWallet.destroy({
+    where: {
+      applicationId: application.id,
+    },
+  })
+}
+
 const walletService = {
   upsertWallet,
   getUserWallets,
@@ -231,6 +241,7 @@ const walletService = {
   requestWalletSign,
   verfiyWalletSign,
   destoryWallet,
+  destoryAllWallet,
 }
 
 export default walletService

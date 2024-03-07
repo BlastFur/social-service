@@ -3,6 +3,7 @@ import WalletController from './wallet'
 import TwitterController from './twitter'
 import UserController from './user'
 import InvitationController from './invitation'
+import ApplicationController from './application'
 export * from './types'
 
 export {
@@ -11,4 +12,5 @@ export {
   TwitterController,
   UserController,
   InvitationController,
+  ApplicationController,
 }

@@ -6,6 +6,7 @@ import {
   TwitterController,
   UserController,
   InvitationController,
+  ApplicationController,
 } from './controllers'
 import { PORT } from './constants'
 
@@ -19,6 +20,8 @@ const app = new APP({
     new TwitterController(),
     new UserController(),
     new InvitationController(),
+    // TODO: only available in dev mode
+    new ApplicationController(),
   ],
 })
 
